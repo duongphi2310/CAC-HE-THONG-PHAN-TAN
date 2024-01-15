@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+    <style>
+        .circle1 {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(222, 234, 255, 0.811);
+            border-radius: 50%;
+            margin-top: 320px;
+            position: relative;
+            animation: moveUP 2s linear infinite;
+          }
+          .smallCircle1 {
+            width: 4px;
+            height: 4px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
+          .smallCircle {
+            width: 35px;
+            height: 8px;
+            background-color: #88c7f1b6;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
+        @keyframes moveUP {
+            0% {
+                transform: translateY(0) rotate(0deg);
+              }
+              25% {
+                transform: translateY(-50px) rotate(90deg);
+              }
+              50% {
+                transform: translateY(0) rotate(180deg);
+              }
+              75% {
+                transform: translateY(50px) rotate(270deg);
+              }
+              100% {
+                transform: translateY(0) rotate(360deg);
+              }
+          }
+        </style>
+        <style>
+            .circle {
+              background-color: rgb(49, 15, 136);
+              border-radius: 50%;
+              position: absolute;
+              left: 50%;
+              top: 50%;
+              transform: translate(-50%, -50%);
+              border: 5px solid rgba(53, 14, 100, 0.7);
+            }
+        </style>          
+<head>
+    <meta charset="UTF-8">
+    <title>Berkeley</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="./css/fontawesome/fontawesome/css/all.min.css">
+    
+    <link rel="stylesheet" href="css/stylesheet.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" 
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" 
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" 
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<body>     
+    <section id="time_section">
+        <div id="app-header">
+            <div>
+                <h5>Thuật toán đồng bộ hóa đồng hồ vật lý theo thuật toán Berkeley</h5>
+            </div>
+            <div class="circle1" style="margin-bottom: 38px;">
+                <div class="smallCircle">
+                    <div class="smallCircle1"></div>
+                </div>
+            </div> 
+        </div>
+        <div id="clock-container" style="height: 320px;">
+            <h3 id="server_time" ></h3>        
+        </div>
+    </section>
+    <button class="btn btn-primary" id="clock-settings" data-toggle="modal" data-target="#editModal">
+        <span class="material-symbols-outlined" class="timer">
+            timer
+            </span>
+    </button>
+
+
+    <section id="table_section">
+        <div class="table-responsive">
+            <table class="table text-center" id="clock-table">
+                <thead>
+                <tr>
+                    <th scope="col">Thời gian bắt đầu</th>
+                    <th scope="col">Thời gian cài đặt</th>
+                    <th scope="col">Thời gian mới</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+
+    </section>
+    <div class="modal fade" id="editModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Chọn thời gian</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body" style="display: flex; flex-direction: row; justify-content: space-around;">
+                    <div class="form-group">
+                        <label for="hoursControl" style="color: blue;">Chọn giờ</label>
+                        <input type="number" min="0" max="24" class="form-control" id="hoursControl" style="color: blue;">
+                    </div>
+                    <div class="form-group">
+                        <label for="minutesControl" style="color: green;">Chọn phút</label>
+                        <input type="number" min="0" max="60" class="form-control" id="minutesControl" style="color: green;">
+                    </div>
+                    <div class="form-group">
+                        <label for="secondsControl" style="color: red;">Chọn giây</label>
+                        <input type="number" min="0" max="60" class="form-control" id="secondsControl" style="color: red;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" style="color: red;">Đóng</button>
+                    <button type="button" class="btn btn-primary" onclick="editTime()" data-dismiss="modal">Đồng ý</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/client.js"></script>
+</body>
+</html>
